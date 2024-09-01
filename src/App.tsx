@@ -1,13 +1,14 @@
+// src/App.tsx
+import React from "react";
 import "./App.css";
 import Roulette from "./Roulette";
 
-function App() {
+const App: React.FC = () => {
   return (
-    <div>
-      <h1>Roulette App</h1>
+    <div className="App">
       <Roulette />
     </div>
   );
-}
+};
 
 export default App;

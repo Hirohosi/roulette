@@ -1,0 +1,32 @@
+/* ルーレットの全体のスタイリング */
+.roulette-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  /* テキストのスタイリング */
+  .roulette-container p {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin: 10px 0;
+  }
+  
+  /* ボタンのスタイリング */
+  .roulette-container button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .roulette-container button:hover {
+    background-color: #0056b3;
+  }
+  

@@ -1,61 +1,71 @@
 // src/Roulette.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Roulette.css";
+import { foodList } from "./constant";
 
-const options = [
-  "Option 1",
-  "Option 2",
-  "Option 3",
-  "Option 4",
-  "Option 5",
-  "Option 6",
-  "Option 7",
-];
+interface Segment {
+  label: string;
+  color: string;
+}
+
+const getRandomFoods = (num: number): string[] => {
+  const shuffled = [...foodList].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, num);
+};
 
 const Roulette: React.FC = () => {
-  const [spinning, setSpinning] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const [angle, setAngle] = useState(0);
+  const [rotation, setRotation] = useState(0);
+  const [segments, setSegments] = useState<Segment[]>([]);
+
+  useEffect(() => {
+    const newLabels = getRandomFoods(6);
+    const colors = [
+      "#FF6384",
+      "#36A2EB",
+      "#FFCE56",
+      "#4BC0C0",
+      "#9966FF",
+      "#FF9F40",
+    ];
+    const newSegments = newLabels.map((label, index) => ({
+      label,
+      color: colors[index],
+    }));
+    setSegments(newSegments);
+  }, []);
 
   const spin = () => {
-    setSpinning(true);
-    const randomIndex = Math.floor(Math.random() * options.length);
-    const newAngle = angle + 360 * 3 + (360 / options.length) * randomIndex;
-    setAngle(newAngle);
-    setTimeout(() => {
-      setSpinning(false);
-      setSelectedOption(options[randomIndex]);
-    }, 3000); // Spin duration
+    const randomDegree = Math.floor(Math.random() * 3600) + 360; // 3600度までのランダムな角度
+    setRotation(rotation + randomDegree);
   };
 
   return (
-    <div className="roulette">
-      <div className="wheel-container">
+    <>
+      <div className="roulette-container">
+        <div className="pointer"></div>
         <div
-          className={`wheel ${spinning ? "spinning" : ""}`}
-          style={{ transform: `rotate(${angle}deg)` }}
+          className="roulette"
+          style={{
+            transform: `rotate(${rotation}deg)`,
+            transition: "transform 3s ease-out",
+          }} // 回転を一定速度に
         >
-          {options.map((option, index) => (
+          {segments.map((segment, index) => (
             <div
               key={index}
               className="segment"
               style={{
-                transform: `rotate(${index * (360 / options.length)}deg)`,
+                backgroundColor: segment.color,
+                transform: `rotate(${index * 60}deg)`,
               }}
             >
-              <div className="segment-label">{option}</div>
+              {segment.label}
             </div>
           ))}
         </div>
-        <div className="pointer"></div>
       </div>
-      <button onClick={spin} disabled={spinning}>
-        Spin
-      </button>
-      {selectedOption && (
-        <div className="result">You got: {selectedOption}</div>
-      )}
-    </div>
+      <button onClick={spin}>Spin</button>
+    </>
   );
 };
 
